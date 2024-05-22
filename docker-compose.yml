@@ -1,0 +1,28 @@
+version: '3.4' 
+ 
+services:
+    SqlServerDb:
+        container_name: SqlServerContainer
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+            - 8002:1433
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=testeLet0102* 
+        networks:
+            - ManagementTasksRest
+    WebApi:
+        container_name: WebApiContainer
+        image: webapisqlserverdockerdemo
+        ports:
+            - 8081:8081 
+        build:
+          context: .
+          dockerfile: Dockerfile
+        depends_on:
+            - SqlServerDb
+        networks:
+            - ManagementTasksRest
+networks:
+    ManagementTasksRest:
+        name: management-tasks-network  
